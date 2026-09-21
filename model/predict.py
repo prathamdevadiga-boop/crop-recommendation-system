@@ -4,7 +4,7 @@ Crop Recommendation System — Prediction Module
 Loads the saved model and provides predict_crop() for inference.
 
 Requires these two files in the same directory (produced by train_model.py):
-    crop_recommendation_model.pkl
+    crop_model.pkl
     label_encoder.pkl
 
 Usage:
@@ -12,8 +12,10 @@ Usage:
     crop, confidence = predict_crop([90, 42, 43, 20.8, 82.0, 6.5, 202.9])
 """
 
-import numpy as np
+from pathlib import Path
+
 import joblib
+import numpy as np
 
 DISCLAIMER = (
     "This prediction is a data-driven suggestion based on statistical "
@@ -25,8 +27,9 @@ DISCLAIMER = (
     "testing and a qualified agronomist before making planting decisions."
 )
 
-_MODEL_PATH = "crop_recommendation_model.pkl"
-_ENCODER_PATH = "label_encoder.pkl"
+_MODEL_DIR = Path(__file__).resolve().parent
+_MODEL_PATH = _MODEL_DIR / "crop_model.pkl"
+_ENCODER_PATH = _MODEL_DIR / "label_encoder.pkl"
 
 _model = joblib.load(_MODEL_PATH)
 _label_encoder = joblib.load(_ENCODER_PATH)

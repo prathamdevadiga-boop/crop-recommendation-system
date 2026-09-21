@@ -6,7 +6,7 @@
 |---|---|
 | `Crop_recommendation.csv` | Training data (2200 rows, 22 crop classes, columns: N, P, K, temperature, humidity, ph, rainfall, label) |
 | `train_model.py` | Full training/evaluation pipeline (Steps 1–10). Run once to produce the two files below. |
-| `crop_recommendation_model.pkl` | The trained, selected model (saved with joblib) |
+| `crop_model.pkl` | The trained, selected model (saved with joblib) |
 | `label_encoder.pkl` | Converts the model's numeric output back into a crop name — **required alongside the model file**, not optional |
 | `predict.py` | Loads the two `.pkl` files and exposes `predict_crop()` for use elsewhere in the project (e.g. a web backend, app) |
 
@@ -20,7 +20,7 @@ pip install pandas scikit-learn xgboost joblib matplotlib seaborn
 ```bash
 python train_model.py
 ```
-This loads the CSV, trains both Random Forest and XGBoost, prints accuracy/precision/recall/F1 for each, plots confusion matrices, checks for overfitting (train-vs-test gap + 5-fold cross-validation), picks the better model by F1-score, and saves it as `crop_recommendation_model.pkl` + `label_encoder.pkl`.
+This loads the CSV, trains both Random Forest and XGBoost, prints accuracy/precision/recall/F1 for each, plots confusion matrices, checks for overfitting (train-vs-test gap + 5-fold cross-validation), picks the better model by F1-score, and saves it as `crop_model.pkl` + `label_encoder.pkl`.
 
 ## How the project lead uses the saved model
 
