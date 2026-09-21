@@ -47,8 +47,8 @@
 
 :root {
   color-scheme: light;
-  /* #FFFFFF */
-  --background: oklch(1 0 0);
+  /* Soft agricultural canvas behind the white information cards. */
+  --background: oklch(0.985 0.012 150);
   /* deep readable green-tinted text */
   --foreground: oklch(0.27 0.04 152);
   --card: oklch(1 0 0);
@@ -100,6 +100,13 @@
 }
 
 @layer components {
+  .app-shell {
+    background:
+      radial-gradient(circle at 0% 0%, oklch(0.92 0.06 150 / 0.55), transparent 30rem),
+      radial-gradient(circle at 100% 12%, oklch(0.96 0.04 95 / 0.45), transparent 24rem),
+      var(--background);
+  }
+
   /* Soft, modern dashboard card elevation */
   .card-surface {
     box-shadow:

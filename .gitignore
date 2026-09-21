@@ -16,6 +16,9 @@ eggs/
 .eggs/
 lib/
 lib64/
+# The Next.js source directory is named lib; keep it under version control.
+!app/lib/
+!app/lib/*.ts
 parts/
 sdist/
 var/

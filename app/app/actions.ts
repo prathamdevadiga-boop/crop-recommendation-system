@@ -7,6 +7,17 @@ import type {
   WeatherData,
 } from '@/lib/types'
 
+const BACKEND_URL = process.env.BACKEND_URL ?? 'http://127.0.0.1:8000'
+
+async function responseError(response: Response): Promise<string> {
+  try {
+    const body = (await response.json()) as { detail?: string }
+    return body.detail ?? `The backend returned ${response.status}.`
+  } catch {
+    return `The backend returned ${response.status}.`
+  }
+}
+
 /**
  * get_weather(location)
  *
@@ -26,10 +37,19 @@ export async function get_weather(
     return { ok: false, error: 'A location is required to fetch weather.' }
   }
 
-  return {
-    ok: false,
-    error:
-      'Weather service is not connected yet. Wire up get_weather(location) in app/actions.ts to return live temperature, humidity, and rainfall.',
+  try {
+    const response = await fetch(
+      `${BACKEND_URL}/weather?location=${encodeURIComponent(location.trim())}`,
+      { cache: 'no-store' },
+    )
+    if (!response.ok) return { ok: false, error: await responseError(response) }
+
+    return { ok: true, data: (await response.json()) as WeatherData }
+  } catch {
+    return {
+      ok: false,
+      error: 'Cannot reach the Python backend. Start it with: uvicorn backend.main:app --reload',
+    }
   }
 }
 
@@ -48,11 +68,20 @@ export async function get_weather(
 export async function predict_crop(
   features: SoilFeatures,
 ): Promise<Result<CropPrediction>> {
-  void features
+  try {
+    const response = await fetch(`${BACKEND_URL}/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(features),
+      cache: 'no-store',
+    })
+    if (!response.ok) return { ok: false, error: await responseError(response) }
 
-  return {
-    ok: false,
-    error:
-      'Prediction model is not connected yet. Wire up predict_crop(features) in app/actions.ts to return a recommended crop and confidence score.',
+    return { ok: true, data: (await response.json()) as CropPrediction }
+  } catch {
+    return {
+      ok: false,
+      error: 'Cannot reach the Python backend. Start it with: uvicorn backend.main:app --reload',
+    }
   }
 }
