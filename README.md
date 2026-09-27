@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://crop-recommendation-system.vercel.app">🌐 Live Demo</a> •
+  <a href="https://crop-recommendation-system-ruby.vercel.app">🌐 Live Demo</a> •
   <a href="https://crop-recommendation-api-5fo2.onrender.com/health">⚡ API Health</a>
 </p>
 
