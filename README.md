@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+  <a href="https://crop-recommendation-system.vercel.app">🌐 Live Demo</a> •
+  <a href="https://crop-recommendation-api-5fo2.onrender.com/health">⚡ API Health</a>
+</p>
+
+<p align="center">
   <a href="#features">Features</a> •
   <a href="#architecture">Architecture</a> •
   <a href="#tech-stack">Tech Stack</a> •
