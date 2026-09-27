@@ -1,3 +1,4 @@
+import time
 import requests
 
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
@@ -51,24 +52,34 @@ def get_weather(latitude, longitude):
         "timezone": "auto"
     }
 
-    try:
-        response = requests.get(
-            WEATHER_URL,
-            params=params,
-            timeout=10
-        )
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(
+                WEATHER_URL,
+                params=params,
+                timeout=10
+            )
 
-        response.raise_for_status()
+            if response.status_code == 429 and attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+                continue
 
-    except requests.exceptions.Timeout:
-        raise RuntimeError(
-            "Weather service timed out. Please try again."
-        )
+            response.raise_for_status()
+            break
 
-    except requests.exceptions.RequestException as e:
-        raise RuntimeError(
-            f"Weather service failed: {e}"
-        )
+        except requests.exceptions.Timeout:
+            raise RuntimeError(
+                "Weather service timed out. Please try again."
+            )
+
+        except requests.exceptions.RequestException as e:
+            if "429" in str(e) and attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+                continue
+            raise RuntimeError(
+                f"Weather service failed: {e}"
+            )
 
     data = response.json()
     current = data["current"]
